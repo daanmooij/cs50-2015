@@ -1,0 +1,49 @@
+// standard libraries
+#include <stdio.h>
+#include <string.h>
+
+// Stanford Portable Library
+#include <spl/gevents.h>
+#include <spl/ginteractors.h>
+#include <spl/gwindow.h>
+
+int main(void)
+{
+    // instantiate window
+    GWindow window = newGWindow(320, 240);
+
+    // instantiate checkbox
+    GCheckBox checkbox = newGCheckBox("I agree");
+    setActionCommand(checkbox, "check");
+    addToRegion(window, checkbox, "SOUTH");
+
+    // listen for events
+    while (true)
+    {
+        // wait for event
+        GActionEvent event = waitForEvent(ACTION_EVENT);
+
+        // if window was closed
+        if (getEventType(event) == WINDOW_CLOSED)
+        {
+            break;
+        }
+
+        // if action command is "check"
+        if (strcmp(getActionCommand(event), "check") == 0)
+        {
+            if (isSelected(checkbox))
+            {
+                printf("checkbox was checked\n");
+            }
+            else
+            {
+                printf("checkbox was unchecked\n");
+            }
+        }
+    }
+
+    // close window
+    closeGWindow(window);
+    return 0;
+}
